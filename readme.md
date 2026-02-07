@@ -1,10 +1,14 @@
 # Microsoft Purview — Subject Access Request Toolkit
 
-This repository contains scripts and operational guidance to assist with processing Subject Access Requests (SARs) using Microsoft Purview exports.
+This repository provides scripts and operational guidance for processing Subject Access Requests (SARs) using Microsoft Purview exports.
 
-It documents a practical technical workflow used to extract, process, filter, and redact data originating from Exchange, OneDrive, and SharePoint.
+It focuses on the technical workflow required to extract, filter, redact, and prepare data originating from:
 
-This guidance focuses on reproducible operational steps rather than legal interpretation or compliance policy.
+* Exchange mailboxes
+* OneDrive
+* SharePoint
+
+This documentation describes operational procedures only and does **not** constitute legal or compliance guidance.
 
 ---
 
@@ -13,147 +17,129 @@ This guidance focuses on reproducible operational steps rather than legal interp
 ```
 README.md
 /docs
-    purview-export.md
-    pst-extraction.md
+    purview-export.md      # Purview case/search/export instructions
+    pst-extraction.md      # Extract PST using pffexport
 /scripts
     filterv3.py
     redact_headers.py
     redact_words.py
+redact_words.txt           # Word list for iterative redaction
 ```
 
 ---
 
-## End-to-End Process Flow
+## End-to-End Workflow
 
-### 1 — Export from Purview
+### 1 — Export From Microsoft Purview
 
-* Run search within Microsoft Purview
-* Export results
-* Download ZIP archives locally
+Run search and export data using Microsoft Purview.
+
+Detailed instructions:
+
+```
+/docs/purview-export.md
+```
 
 Expected outputs:
 
-* `items.*.zip` — OneDrive/SharePoint files
-* `psts.*.zip` — Exchange mailbox PST
+| Archive   | Contents                    |
+| --------- | --------------------------- |
+| `items.*` | OneDrive / SharePoint files |
+| `psts.*`  | Exchange PST                |
 
 ---
 
-### 2 — Case Folder Setup
+### 2 — Extract PST Content
 
-Create a working directory for the request:
+Extract mailbox content using `pffexport`.
+
+Full setup and usage:
 
 ```
-Teams/cases/<pupil-name>/
+/docs/pst-extraction.md
 ```
 
-Upload:
+Result:
 
-* Extracted ZIP contents
-* PST archive
+* Emails exported as text
+* Attachments extracted
+* Folder structure created under:
 
-This folder becomes the working location for processing.
+```
+output.export/
+```
 
 ---
 
-### 3 — PST Extraction
-
-Extract email content using `pff-tools`.
-
-```bash
-pffexport -t <output-folder> -f all <pst-file>
-```
-
-This:
-
-* Processes all folders (including recoverable items)
-* Exports messages to text
-* Extracts attachments
-
-See `/docs/pst-extraction.md` for full setup instructions.
-
----
-
-### 4 — Filtering Stage
+### 3 — Filter & Normalize Export
 
 Run:
 
-```bash
+```
 python filterv3.py
 ```
 
-Requires:
+Dependency:
 
 ```
-beautifulsoup4
+pip install beautifulsoup4
 ```
 
-#### Actions Performed
+### Actions Performed
 
-* Deletes empty folders
-
-* Deletes metadata files:
+* Removes empty folders
+* Deletes metadata files
 
   * `conversationindex.txt`
   * `recipients.txt`
+* Filters attachments
 
-* Moves attachments containing the pupil's name in the filename to:
+  * Keeps files containing subject name
+  * Moves to `output.export/attachments`
+  * Deletes others
+* Converts HTML message bodies → `.txt`
 
-```
-output.export/attachments
-```
-
-* Deletes other attachments
-
-* Extracts readable text from HTML message files
+This prepares content for redaction.
 
 ---
 
-### 5 — Header Redaction
+### 4 — Header & Address Redaction
 
 Run:
 
-```bash
+```
 python redact_headers.py
 ```
 
-#### Redacts
+### Actions Performed
 
-The following fields:
-
-* sender name
-* sender email address
-* sent representing name
-* sent representing email address
-* from
-* to
-* cc
-* return-path
-
-Also redacts:
-
-* Any remaining email addresses detected in content
+* Redacts identifying header fields
+* Redacts remaining email addresses
+* Preserves formatting
+* Safe to rerun
 
 ---
 
-### 6 — Word Redaction
+### 5 — Keyword Redaction
 
-Run:
-
-```bash
-python redact_words.py
-```
-
-This script:
-
-* Redacts terms listed in:
+Edit:
 
 ```
 redact_words.txt
 ```
 
-The file can be edited and the script rerun as required during review.
+Then run:
 
-This supports iterative redaction as additional sensitive terms are identified.
+```
+python redact_words.py
+```
+
+### Actions Performed
+
+* Redacts specified words/phrases
+* Case-insensitive matching
+* Reports redacted terms per file
+* Designed for iterative use
 
 ---
 
@@ -162,13 +148,7 @@ This supports iterative redaction as additional sensitive terms are identified.
 ```
 Purview Export
       ↓
-Download ZIP files
-      ↓
-Create Case Folder
-      ↓
-Upload & Extract Files
-      ↓
-Extract PST (pffexport)
+Extract PST
       ↓
 filterv3.py
       ↓
@@ -179,7 +159,27 @@ redact_words.py
 
 ---
 
+## Dependencies Summary
+
+| Tool           | Purpose                    |
+| -------------- | -------------------------- |
+| WSL + Ubuntu   | PST extraction environment |
+| pff-tools      | Extract Exchange PST       |
+| Python 3       | Script execution           |
+| beautifulsoup4 | HTML text extraction       |
+
+---
+
+## Operational Notes
+
+* Scripts modify files in place
+* Work on extracted copies of exports
+* Redaction stages can be rerun safely
+* Repository focuses on tooling — workflow governance is environment-specific
+
+---
+
 ## Disclaimer
 
 This repository documents technical workflow only.
-It does not constitute legal guidance regarding SAR obligations or compliance interpretation.
+It does not constitute legal advice or compliance guidance.
