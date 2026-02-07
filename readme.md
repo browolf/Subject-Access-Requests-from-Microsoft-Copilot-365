@@ -23,7 +23,7 @@ README.md
     filterv3.py
     redact_headers.py
     redact_words.py
-redact_words.txt           # Word list for iterative redaction
+    redact_words.txt           # Word list for iterative redaction
 ```
 
 ---
