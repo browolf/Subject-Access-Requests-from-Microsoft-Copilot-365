@@ -20,7 +20,7 @@ README.md
     purview-export.md      # Purview case/search/export instructions
     pst-extraction.md      # Extract PST using pffexport
 /scripts
-    filterv3.py
+    filter.py
     redact_headers.py
     redact_words.py
     redact_words.txt           # Word list for iterative redaction
