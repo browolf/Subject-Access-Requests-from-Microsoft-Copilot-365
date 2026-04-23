@@ -66,8 +66,8 @@ E:\  →  /mnt/e
 Example paths:
 
 ```
-PST file:     /mnt/e/purview/export.pst
-Output folder:/mnt/e/purview/output
+PST file:     /mnt/e/purview/Exchange.001.pst
+Output folder:/mnt/e/purview/output.export
 ```
 
 ---
