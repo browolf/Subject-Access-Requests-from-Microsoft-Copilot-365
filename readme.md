@@ -20,10 +20,11 @@ README.md
     purview-export.md      # Purview case/search/export instructions
     pst-extraction.md      # Extract PST using pffexport
 /scripts
-    filter.py
-    redact_headers.py
-    redact_words.py
-    redact_words.txt           # Word list for iterative redaction
+    1.filterv5.py
+    2.redact_metadatav2.py
+    3.redact_wordsv3.py
+    redact_words.txt         # Custom redaction list
+    school_staff.txt         # Staff names for redaction
 ```
 
 ---
@@ -76,7 +77,7 @@ output.export/
 Run:
 
 ```
-python filterv3.py
+python 1.filterv5.py
 ```
 
 Dependency:
@@ -87,59 +88,65 @@ pip install beautifulsoup4
 
 ### Actions Performed
 
-* Removes empty folders
-* Deletes metadata files
+* Removes unnecessary metadata files:
+    * conversationindex.txt
+    * recipients.txt
+* Filters attachments:
+    * Keeps files containing the target name
+    * Moves them to output.export/attachments
+    * Deletes all others
+* Converts HTML → clean .txt using BeautifulSoup
+* Merges extracted content into:
+    * combined_messages.txt (includes Subject/Date)
+    * combined_appointments.txt
+    * combined_meetings.txt
+* Removes redundant PST folder structures (e.g. Items)
 
-  * `conversationindex.txt`
-  * `recipients.txt`
-* Filters attachments
-
-  * Keeps files containing subject name
-  * Moves to `output.export/attachments`
-  * Deletes others
-* Converts HTML message bodies → `.txt`
-
-This prepares content for redaction.
+This produces a clean, structured dataset ready for redaction.
 
 ---
 
-### 4 — Header & Address Redaction
+### 4 — Metadata & Email Redaction
 
 Run:
 
 ```
-python redact_headers.py
+python 2.redact_metadatav2.py
 ```
 
 ### Actions Performed
 
-* Redacts identifying header fields
-* Redacts remaining email addresses
-* Preserves formatting
+* Redacts header fields:
+    * From, To, Cc, Sender, Return-Path, etc.
+* Handles multi-line (folded) headers correctly
+* Redacts all email addresses across content
+* Preserves formatting and structure
 * Safe to rerun
 
 ---
 
-### 5 — Keyword Redaction
+### 5 — Word & Name Redaction
 
 Edit:
 
 ```
 redact_words.txt
+school_staff.txt
 ```
 
 Then run:
 
 ```
-python redact_words.py
+python 3.redact_wordsv3.py
 ```
 
 ### Actions Performed
 
-* Redacts specified words/phrases
-* Case-insensitive matching
-* Reports redacted terms per file
-* Designed for iterative use
+* Redacts specified words and phrases
+* Supports multi-word names (e.g. full names)
+* Case-insensitive whole-word matching
+* Logs all matched/redacted terms
+* Designed for iterative refinement
 
 ---
 
@@ -150,11 +157,11 @@ Purview Export
       ↓
 Extract PST
       ↓
-filterv3.py
+1.filterv5.py
       ↓
-redact_headers.py
+2.redact_metadatav2.py
       ↓
-redact_words.py
+3.redact_wordsv3.py
 ```
 
 ---
