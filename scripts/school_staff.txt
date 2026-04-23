@@ -1,0 +1,2 @@
+this file is a list of school staff names (firstname surname) and other data e.g. school phone numbers
+one per line. 
