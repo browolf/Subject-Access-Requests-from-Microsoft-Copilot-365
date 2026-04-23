@@ -70,12 +70,6 @@ PST file:     /mnt/e/purview/export.pst
 Output folder:/mnt/e/purview/output
 ```
 
-Create the output folder if needed:
-
-```bash
-mkdir -p /mnt/e/purview/output
-```
-
 ---
 
 ## Extract Emails
@@ -83,7 +77,7 @@ mkdir -p /mnt/e/purview/output
 Run:
 
 ```bash
-pffexport -t /mnt/e/purview/output -f all /mnt/e/purview/export.pst
+/mnt/e/pst_extractor$ pffexport -m all -t ./output -f all ./Exchange.001.pst
 ```
 
 This will:
