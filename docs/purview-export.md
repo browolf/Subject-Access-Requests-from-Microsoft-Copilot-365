@@ -47,6 +47,22 @@ OR (attachmentnames:firstname surname*)
 OR (filename: firstname surname*)
 ```
 
+OR
+
+```
+(
+  kind:email
+  AND
+  (firstname AND Surname)
+)
+OR
+(
+  kind:docs
+  AND
+  filename:(Firstname AND Surname)
+)
+```
+
 This captures:
 
 * Email subjects
