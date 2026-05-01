@@ -74,10 +74,18 @@ Output folder:/mnt/e/purview/output.export
 
 ## Extract Emails
 
-Run:
+Folder now contains a pst for every user 
+
+Run this sh script to extract each file 
+Remember to make the script executable: chmod +x extract.sh
 
 ```bash
-/mnt/e/pst_extractor$ pffexport -m all -t ./output -f all ./Exchange.001.pst
+for f in ./multi_pst/*.pst; do
+    base=$(basename "$f" .pst)
+    name=${base%@*}
+
+    pffexport -m all -t "./multi_pst_extracted/$name" -f all "$f"
+done
 ```
 
 This will:
