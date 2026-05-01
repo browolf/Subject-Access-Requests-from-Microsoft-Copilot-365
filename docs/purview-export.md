@@ -78,10 +78,11 @@ For email and files adjust data sources to mailboxes or sharepoint according.
 
 ## Export Results
 
-Use default export settings **except disable**:
+For files untick  "Organize data from different locations into separate folders or PSTs" and "Include folder and path of the source"
 
-* Organize data from different locations into separate folders or PSTs
-* Include folder and path of the source
+For email only untick "Include folder and path of the source"
+
+Set the max sizes to whatever your prefer. I like 2GB
 
 ---
 
@@ -100,7 +101,7 @@ Contains:
 
 Contains:
 
-* PST file with Exchange mailbox data
+* a PST file for every user 
 
 ---
 
