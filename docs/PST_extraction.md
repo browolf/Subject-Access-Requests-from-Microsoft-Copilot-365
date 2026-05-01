@@ -90,11 +90,7 @@ done
 
 This will:
 
-* Process all folders (including hidden and recoverable items)
-* Extract all emails
-* Save each email as plain text files
-
-Large PST files may take time to complete.
+* extract each pst as a folder  prefix.export 
 
 ---
 
