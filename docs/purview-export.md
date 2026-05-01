@@ -39,37 +39,40 @@ Select:
 
 ### Condition Builder (KQL)
 
-Use:
-
-```
-(subject:"firstname surname")
-OR (attachmentnames:firstname surname*)
-OR (filename: firstname surname*)
-```
-
-OR
+Meetings
 
 ```
 (
-  kind:email
-  AND
-  (firstname AND Surname)
+kind:meetings
+AND firstname
+AND Surname
 )
-OR
-(
-  kind:docs
-  AND
-  filename:(Firstname AND Surname)
-)
+
+or AND "firstname surname"
 ```
 
-This captures:
+Email
 
-* Email subjects
-* Attachment names
-* OneDrive/SharePoint filenames
+```
+kind:email
 
-Adjust naming patterns as needed.
+AND firstname
+AND surname
+AND send>=2025-09-03
+AND (NOT from: synergy email)
+AND (NOT recipients:(distribution list OR distribution list or prefix))
+AND (NOT sar or "subject access request")
+AND (NOT Subject:"Reaction Daily Digest)
+```
+
+Files
+
+```
+firstname AND surname
+AND created>=2025-09-03
+```
+
+For email and files adjust data sources to mailboxes or sharepoint according. 
 
 ---
 
