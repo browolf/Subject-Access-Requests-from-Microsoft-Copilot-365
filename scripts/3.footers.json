@@ -1,0 +1,12 @@
+
+{
+  "remove_blocks": [
+    "EXTERNAL EMAIL.*?inspection",
+    "\\*{10,}.*?This message may contain confidential information\\..*?NHS\\.net Connect.*?Support",
+    "Please scan this QR code.*?bit\\.ly/[A-Za-z0-9]+",
+    "\\*{10,}.*?This e-mail contains information intended for the addressee only\\..*?opening attachments\\.",
+    "the information contained in this message.*?freedom of information act\\.",
+    "\\*{5,}.*?This message may contain confidential information\\..*?Joining NHSmail.*?NHSmail Support"
+
+  ]
+}
