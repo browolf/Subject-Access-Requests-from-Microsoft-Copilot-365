@@ -58,11 +58,11 @@ kind:email
 
 AND firstname
 AND surname
-AND send>=2025-09-03
-AND (NOT from: synergy email)
-AND (NOT recipients:(distribution list OR distribution list or prefix))
-AND (NOT sar or "subject access request")
-AND (NOT Subject:"Reaction Daily Digest)
+AND sent>=2025-09-03
+AND (NOT from:synergy-email)
+AND (NOT recipients:(distributionlist OR distributionlist OR prefix))
+AND (NOT sar OR "subject access request")
+AND (NOT Subject:"Reaction Daily Digest")
 ```
 
 Files
